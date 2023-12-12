@@ -38,6 +38,8 @@ llm_corpus_quality支持以下特性：
 * simhash去重 -> corpus_quality_process/deduplication
 * 质量评估（待做...）-> corpus_quality_process/quality_evaluation
 
+### requirement
+java11+
 
 ### contact
 1、github：https://github.com/jiangnanboy
