@@ -19,7 +19,7 @@ llm_corpus_quality支持以下特性：
 --------------------------------------------------------------------------------
 ### the overall processing process of the pre-trained corpus of the llm
 <div align=center>
-<img src="llm_corpus_quality_process.png" width="680" height="334"/><br/>
+<img src="llm_corpus_process.png" width="613" height="393"/><br/>
 </div>
 
 大模型预训练语料清洗流程，共包括以下4个模块：
