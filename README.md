@@ -17,12 +17,13 @@ llm_corpus_quality支持以下特性：
 
 * 质量评估
 --------------------------------------------------------------------------------
-### the overall processing process of the pre-trained corpus of the llm
+### the overall processing process of the pre-trained corpus of the llm 大模型语料处理流程
+
 <div align=center>
 <img src="llm_corpus_process.png" width="613" height="393"/><br/>
 </div>
 
-大模型预训练语料清洗流程，共包括以下5个模块：
+大模型预训练语料清洗流程，共包括4个阶段5个模块：
 
 1. 语料清洗规则过滤：通常经过格式转换后的json文件仍存在很多问题，不能直接用于构建训练数据集。通常会以句子或篇章作为过滤单位，通过检测句子或篇章内是否含有大量的怪异符号、是否存在html网页标签等来判断文本是否为合格文本。
 2. 敏感词过滤器：利用自动机，过滤色情、赌博、部分低质量广告等内容的文本。
