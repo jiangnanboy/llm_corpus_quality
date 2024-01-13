@@ -1,11 +1,13 @@
 package com.sy.corpus_quality_main;
 
+import com.sy.corpus_quality_process.quality_evaluation.QualityEvaluation;
 import com.sy.corpus_quality_process.rule_quality.RuleQuality;
 import com.sy.corpus_quality_process.deduplication.hash_sim.DeDuplication;
 import com.sy.corpus_quality_process.sensitivity_advertising.advertising.AdDetection;
 import com.sy.corpus_quality_process.sensitivity_advertising.sensitivity.SenDetection;
 import com.sy.util.CollectionUtil;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,23 +20,31 @@ public class CorpusQuality {
     SenDetection senDetection = null;
     AdDetection adDetection = null;
     DeDuplication deDuplication = null;
-
-    public CorpusQuality(RuleQuality cleanRule) {
-        this(cleanRule, null);
-    }
-    public CorpusQuality(RuleQuality cleanRule, DeDuplication deDuplication) {
-        this(cleanRule, null, deDuplication);
+    QualityEvaluation qualityEvaluation = null;
+    double ppl = 0.0;
+    public CorpusQuality(RuleQuality cleanRule, double ppl) {
+        this(cleanRule, null, ppl);
     }
 
-    public CorpusQuality(RuleQuality cleanRule, SenDetection senDetection, DeDuplication deDuplication) {
-        this(cleanRule, senDetection, null, deDuplication);
+    public CorpusQuality(RuleQuality cleanRule, DeDuplication deDuplication, double ppl) {
+        this(cleanRule, null, deDuplication, ppl);
     }
 
-    public CorpusQuality(RuleQuality ruleQuality, SenDetection senDetection, AdDetection adDetection, DeDuplication deDuplication) {
+    public CorpusQuality(RuleQuality cleanRule, SenDetection senDetection, DeDuplication deDuplication, double ppl) {
+        this(cleanRule, senDetection, null, deDuplication, ppl);
+    }
+
+    public CorpusQuality(RuleQuality ruleQuality, SenDetection senDetection, AdDetection adDetection, DeDuplication deDuplication, double ppl) {
+        this(ruleQuality, senDetection, adDetection, deDuplication, null, ppl);
+    }
+
+    public CorpusQuality(RuleQuality ruleQuality, SenDetection senDetection, AdDetection adDetection, DeDuplication deDuplication, QualityEvaluation qualityEvaluation, double ppl) {
         this.ruleQuality = ruleQuality;
         this.senDetection = senDetection;
         this.adDetection = adDetection;
         this.deDuplication = deDuplication;
+        this.qualityEvaluation = qualityEvaluation;
+        this.ppl = ppl;
     }
 
     public List<String> quality(List<String> listStr) {
@@ -72,6 +82,14 @@ public class CorpusQuality {
             // stage 3, deduplication
             if(Optional.ofNullable(this.deDuplication).isPresent()) {
                 if(this.deDuplication.isDuplicate(para)) {
+                    continue;
+                }
+            }
+
+            // stage4, quality evaluation
+            if(Optional.ofNullable(this.qualityEvaluation).isPresent()) {
+                List<String> list = Arrays.asList(para.split(""));
+                if(this.qualityEvaluation.pplScore(list) > this.ppl) {
                     continue;
                 }
             }
@@ -121,6 +139,15 @@ public class CorpusQuality {
                 return "";
             }
         }
+
+        // stage4, quality evaluation
+        if(Optional.ofNullable(this.qualityEvaluation).isPresent()) {
+            List<String> list = Arrays.asList(text.split(""));
+            if(this.qualityEvaluation.pplScore(list) > this.ppl) {
+                return "";
+            }
+        }
+
         return text;
     }
 
