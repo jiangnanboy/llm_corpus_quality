@@ -1,6 +1,7 @@
 package com.sy.corpus_quality_main;
 
 import com.sy.corpus_quality_process.deduplication.hash_sim.DeDuplication;
+import com.sy.corpus_quality_process.quality_evaluation.QualityEvaluation;
 import com.sy.corpus_quality_process.rule_quality.RuleQuality;
 import com.sy.corpus_quality_process.sensitivity_advertising.advertising.AdDetection;
 import com.sy.corpus_quality_process.sensitivity_advertising.sensitivity.SenDetection;
@@ -19,9 +20,10 @@ public class CorpusQualityMain {
         // hash data of corpus to deduplication (read and save)
         var hashFile = PropertiesReader.get("dedeplication_hash_path");
 
-        //1
+        //1.rule
         var ruleQuality = new RuleQuality();
-        //2
+
+        //2.sensitivity and advertising detection
         var simpleSenDetectionProcessor = SimpleSenDetectionProcessor.newInstance();
         var senDetection = simpleSenDetectionProcessor.getKWSeeker("sensitive_words_path");
 
@@ -30,14 +32,19 @@ public class CorpusQualityMain {
         var stop_words_path = PropertiesReader.get("stop_words_path");
         var adDetection = new AdDetection(ad_detect_model_path, ad_dict_path, stop_words_path);
 
-        //3
+        //3.text deduplication
         var deDuplication = new DeDuplication(4, 3);
+
+        //4.quality evaluation
+        var ngramModelPath = PropertiesReader.get("language_model_path");
+        var qualityEvaluation = new QualityEvaluation(ngramModelPath);
+
         // load hash
         if(Files.exists(Paths.get(hashFile))) {
             deDuplication.loadHash(hashFile);
         }
 
-        var corpusQuality = new CorpusQuality(ruleQuality, senDetection, adDetection, deDuplication);
+        var corpusQuality = new CorpusQuality(ruleQuality, senDetection, adDetection, deDuplication, qualityEvaluation, 100);
         var corpus = "对未按土地、环保和投资管理等法律法规履行相关手续或手续不符合规定的违规项目，地方政府要按照要求进行全面清理。一，凡是未开工的违规项目，一律不得开工建设；二，凡是不符合产业政策、准入标准、环保要求的违规项目一律停建。";
         var result = corpusQuality.quality(corpus);
         System.out.println(result);
