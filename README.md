@@ -1,22 +1,26 @@
 ### cleaning of llm corpus 大模型语料清洗
 
 -----------------------------------------------------------------------
-数据是人工智能领域发展的基础要素之一。随着大规模预训练模型及相关技术不断取得突破，在相应研究中使用高效数据处理工具提升数据质量变得越来越重要。
-llm_corpus_quality集成了包含规则清洗、敏感词过滤、广告词过滤、去重以及语料质量自动评估等功能在内的多个数据处理工具与算法，为中文大模型的训练提供安全可靠的数据。
+数据是人工智能领域发展的基础要素之一。随着大规模预训练模型及相关技术不断取得突破，在相应研究中使用高效数据处理工具提升数据质量变得越来越重要。 
+llm_corpus_quality主要包含规则清洗、敏感词过滤、广告词过滤、去重以及语料质量评估等功能在内的多个数据处理方法，为中文大模型的训练提供安全可靠的数据。
+
+Data is one of the fundamental elements of the development of artificial intelligence. With the continuous breakthrough of large-scale pre-training models and related technologies,
+it is becoming more and more important to use efficient data processing tools to improve data quality in corresponding research. llm_corpus_quality mainly includes a number of data processing methods, 
+including rule cleaning, sensitive word filtering, advertising word filtering, deduplication and corpus quality assessment, which provides safe and reliable data for the training of Chinese large models.
 
 本项目采用java实现。
 
 llm_corpus_quality支持以下特性：
 
-* 规则清洗
+* 规则清洗(rule cleaning)
 
-* 敏感词过滤
+* 敏感词过滤(sensitive word filtering)
 
-* 广告过滤
+* 广告过滤(advertising word filtering)
 
-* 去重
+* 去重(deduplication)
 
-* 质量评估
+* 质量评估(corpus quality assessment)
 --------------------------------------------------------------------------------
 ### the overall processing process of the pre-trained corpus of the llm 大模型语料清洗流程
 
@@ -26,24 +30,40 @@ llm_corpus_quality支持以下特性：
 
 大模型预训练语料清洗流程，共包括4个阶段5个模块：
 
+Large model pre-training corpus cleaning process, including 4 stages and 5 modules:
+
 1. 规则清洗：利用规则对一些低质量的文本段落进行初步过滤，这些规则主要包括低密度文本、异常符号、中文比例过低等。
+
+rule cleaning: Some low-quality text paragraphs are preliminatively filtered by rules, which mainly include low-density text, abnormal symbols, and low Chinese proportion.          
+
 2. 敏感词过滤器：利用自动机，过滤色情、赌博、敏感等内容的文本。
+
+sensitive word filtering: Filter text for pornography, gambling, sensitive content, etc.                       
+
 3. 广告过滤：利用textcnn模型，过滤涉嫌广告内容。(见https://github.com/jiangnanboy/ad_detect_textcnn)
+
+advertising word filtering:Filter advertising content.                         
+
 4. 去重：利用simhash对相似文本片段进行去重。
+
+deduplication: simhash is used to de-duplicate similar text fragments.
+
 5. 质量评估：采用ngram语言模型评估的方法，对语料进行概率预估，文本质量越高的语句，困惑度ppl越低，设定一个ppl阈值，高于这个阈值为低质量语料，可过滤。
 
+corpus quality assessment: ngram language model evaluation method is used to estimate the probability of corpus. The higher the quality of the text, the lower the confusion ppl. A ppl threshold value is set, higher than this threshold, the low-quality corpus can be filtered.                        
+
 ### usage
-使用方式见【src/main/java/com/sy/corpus_quality_main】
+【src/main/java/com/sy/corpus_quality_main】
 
-* 规则清洗 -> corpus_quality_process/rule_quality
-* 敏感词过滤 -> corpus_quality_process/sensitivity_advertising/sensitivity
-* 广告过滤 -> corpus_quality_process/sensitivity_advertising/advertising
-* simhash去重 -> corpus_quality_process/deduplication
-* 质量评估 -> corpus_quality_process/quality_evaluation
+* 规则清洗(rule cleaning) -> corpus_quality_process/rule_quality
+* 敏感词过滤(sensitive word filtering) -> corpus_quality_process/sensitivity_advertising/sensitivity
+* 广告过滤(advertising word filtering) -> corpus_quality_process/sensitivity_advertising/advertising
+* simhash去重(deduplication) -> corpus_quality_process/deduplication
+* 质量评估(corpus quality assessment) -> corpus_quality_process/quality_evaluation
 
-ngram模型的训练见corpus_quality_process/quality_evaluation/ngram，
+ngram模型训练(training of ngram model) -> corpus_quality_process/quality_evaluation/ngram，
 
-这里有个训练好的ngram模型，链接：https://pan.baidu.com/s/1VbBF_R6IQfKVNDipNN3QDg 提取码：sy12
+这里有个训练好的ngram模型(Here's a trained ngram model)，链接：https://pan.baidu.com/s/1VbBF_R6IQfKVNDipNN3QDg 提取码：sy12
 
 ``` java
         // hash data of corpus to deduplication (read and save)
