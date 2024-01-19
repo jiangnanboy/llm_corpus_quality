@@ -10,7 +10,7 @@ including rule cleaning, sensitive word filtering, advertising word filtering, d
 
 本项目采用java实现。
 
-llm_corpus_quality支持以下特性：
+llm_corpus_quality支持以下方法：
 
 * 规则清洗(rule cleaning)
 
@@ -34,23 +34,23 @@ Large model pre-training corpus cleaning process, including 4 stages and 5 modul
 
 1. 规则清洗：利用规则对一些低质量的文本段落进行初步过滤，这些规则主要包括低密度文本、异常符号、中文比例过低等。
 
-rule cleaning: Some low-quality text paragraphs are preliminatively filtered by rules, which mainly include low-density text, abnormal symbols, and low Chinese proportion.          
+   rule cleaning: Some low-quality text paragraphs are preliminatively filtered by rules, which mainly include low-density text, abnormal symbols, and low Chinese proportion.          
 
 2. 敏感词过滤器：利用自动机，过滤色情、赌博、敏感等内容的文本。
 
-sensitive word filtering: Filter text for pornography, gambling, sensitive content, etc.                       
+   sensitive word filtering: Filter text for pornography, gambling, sensitive content, etc.                       
 
 3. 广告过滤：利用textcnn模型，过滤涉嫌广告内容。(见https://github.com/jiangnanboy/ad_detect_textcnn)
 
-advertising word filtering:Filter advertising content.                         
+   advertising word filtering:Filter advertising content.                         
 
 4. 去重：利用simhash对相似文本片段进行去重。
 
-deduplication: simhash is used to de-duplicate similar text fragments.
+   deduplication: simhash is used to de-duplicate similar text fragments.
 
 5. 质量评估：采用ngram语言模型评估的方法，对语料进行概率预估，文本质量越高的语句，困惑度ppl越低，设定一个ppl阈值，高于这个阈值为低质量语料，可过滤。
 
-corpus quality assessment: ngram language model evaluation method is used to estimate the probability of corpus. The higher the quality of the text, the lower the confusion ppl. A ppl threshold value is set, higher than this threshold, the low-quality corpus can be filtered.                        
+   corpus quality assessment: ngram language model evaluation method is used to estimate the probability of corpus. The higher the quality of the text, the lower the confusion ppl. A ppl threshold value is set, higher than this threshold, the low-quality corpus can be filtered.                        
 
 ### usage
 【src/main/java/com/sy/corpus_quality_main】
