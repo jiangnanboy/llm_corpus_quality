@@ -102,6 +102,9 @@ ngram模型训练(training of ngram model) -> corpus_quality_process/quality_eva
         deDuplication.saveHash(hashFile);
 ```
 
+### todo
+将 https://github.com/jiangnanboy/text_security_audit 中的政治、色情、辱骂、暴力违禁敏感内容检测模型整合到本项目中，完善数据质量检测过程。
+
 ### requirement
 java11+
 
